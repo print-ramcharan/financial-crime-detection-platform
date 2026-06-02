@@ -1,0 +1,9 @@
+fastapi
+uvicorn
+xgboost
+shap
+pandas
+numpy
+scikit-learn
+kafka-python-ng
+pydantic
