@@ -205,3 +205,74 @@ Every action must be logged (Transaction Received, Risk Calculated, SHAP Generat
 * Multi-model ensemble
 * Sanctions screening & KYC integration
 * Entity resolution & Adverse media search
+
+---
+
+## Getting Started
+
+### Prerequisites
+- Docker & Docker Compose
+- Java 17 (JDK)
+- Python 3.9+
+
+---
+
+### Step 1: Start Infrastructure
+Launch Zookeeper, Apache Kafka, and PostgreSQL:
+```bash
+docker-compose up -d
+```
+
+---
+
+### Step 2: Initialize & Train ML Model
+Navigate to the ML Scoring Service, install requirements, and run the training script to generate the initial XGBoost model:
+```bash
+cd ml-scoring-service
+python3 -m venv venv
+source venv/bin/activate
+pip install -r requirements.txt
+python train_model.py
+```
+This trains the XGBoost model on synthetic data and saves it to `models/xgboost_model.json`.
+
+---
+
+### Step 3: Start the ML Scoring Service
+Run the FastAPI application:
+```bash
+uvicorn app.main:app --reload --port 8000
+```
+This starts the ML model server, connects to Kafka, and listens to incoming transactions.
+
+---
+
+### Step 4: Run the Backend Service
+Run the Spring Boot application. It will automatically initialize the database schema in PostgreSQL and load default compliance rules and mock accounts:
+```bash
+cd ../backend-service
+./mvnw spring-boot:run
+```
+
+---
+
+### Step 5: Start the Frontend Dashboard
+Run the Next.js frontend:
+```bash
+cd ../frontend-dashboard
+npm install
+npm run dev
+```
+Open `http://localhost:3000` to view the compliance dashboard.
+
+---
+
+### Step 6: Simulate Real-Time Transactions
+Run the transaction simulator script to stream mock normal and suspicious transaction events into the system:
+```bash
+cd ../ml-scoring-service
+source venv/bin/activate
+python simulate_transactions.py
+```
+Check the Frontend Dashboard to see incoming transactions, real-time risk scores, SHAP explanations, triggered alerts, and automatic SAR generation.
+
