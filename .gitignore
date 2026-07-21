@@ -1,0 +1,27 @@
+# Logs
+*.log
+backend.log
+frontend.log
+sim.log
+ml_scoring.log
+
+# Java
+target/
+
+# Python
+__pycache__/
+*.pyc
+.venv/
+venv/
+
+# Models
+ml-scoring-service/models/
+*.pkl
+*.joblib
+
+# IDE
+.idea/
+.vscode/
+
+# macOS
+.DS_Store
